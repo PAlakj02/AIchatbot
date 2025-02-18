@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Medical Device Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .status {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .status div {
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            width: 30%;
+        }
+        .healthy { background: #d4edda; color: #155724; }
+        .warning { background: #fff3cd; color: #856404; }
+        .critical { background: #f8d7da; color: #721c24; }
+        canvas {
+            width: 100% !important;
+            max-height: 300px;
+        }
+        .history {
+            margin-top: 20px;
+        }
+        .insights {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h2>AI Medical Device Monitoring Dashboard</h2>
+
+        <div class="status">
+            <div id="statusBox" class="healthy">Device Status: ✅ All Systems Normal</div>
+            <div id="efficiencyBox" class="healthy">Efficiency: 95%</div>
+            <div id="maintenanceBox" class="warning">🔧 Next Maintenance: In 7 Days</div>
+        </div>
+
+        <canvas id="usageChart"></canvas>
+
+        <div class="history">
+            <h3>Recent Maintenance History</h3>
+            <ul id="maintenanceList">
+                <li>🔍 MRI Scanner - Calibration check (Feb 10, 2025)</li>
+                <li>🔧 Ventilator - Filter replacement (Jan 25, 2025)</li>
+                <li>⚙️ Infusion Pump - Battery check (Jan 15, 2025)</li>
+            </ul>
+        </div>
+
+        <div class="insights">
+            <h3>🔍 AI Insights & Alerts</h3>
+            <p>⚠️ **Warning:** The ventilator in ICU-3 is showing **slight pressure instability.** A technician should review it.</p>
+            <p>📊 **Efficiency Notice:** The MRI scanner’s **power consumption increased by 10% this month.** Consider checking cooling efficiency.</p>
+            <p>✅ **Recommendation:** Regular filter replacements have improved the **infusion pump’s performance by 8%.** Keep up the maintenance routine!</p>
+        </div>
+    </div>
+
+    <script>
+        // Simulated Medical Device Usage Data
+        const usageData = [80, 85, 83, 90, 88, 92, 94, 95, 93, 89, 87, 91];
+        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Device Utilization (%)',
+                    data: usageData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Update Status Based on Data
+        function updateStatus() {
+            const statusBox = document.getElementById("statusBox");
+            const efficiencyBox = document.getElementById("efficiencyBox");
+            const maintenanceBox = document.getElementById("maintenanceBox");
+
+            let efficiency = usageData[usageData.length - 1];
+
+            if (efficiency > 90) {
+                statusBox.innerText = "Device Status: ✅ All Systems Normal";
+                statusBox.className = "healthy";
+            } else if (efficiency > 80) {
+                statusBox.innerText = "Device Status: ⚠️ Some Devices Need Attention";
+                statusBox.className = "warning";
+            } else {
+                statusBox.innerText = "Device Status: ❌ Urgent Maintenance Needed!";
+                statusBox.className = "critical";
+            }
+
+            efficiencyBox.innerText = `Efficiency: ${efficiency}%`;
+        }
+
+        updateStatus();
+    </script>
+
+</body>
+</html>
